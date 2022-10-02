@@ -28,7 +28,7 @@ class ImageGeneratorService
         ];
         $userFile = new UserFile();
         $repository = new UserFileRepository($userFile);
-        $repository->create($data);
+        $userFile = $repository->create($data);
 
         UserFileGenerated::dispatch($userFile);
     }
