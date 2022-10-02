@@ -2,7 +2,9 @@
 
 namespace App\Http\Services\UserFiles;
 
+use App\Events\UserFileGenerated;
 use App\Models\UserFile;
+use App\Repositories\UserFileRepository;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
@@ -20,9 +22,14 @@ class ImageGeneratorService
         $url = self::$IMAGE_API_URL;
         $imageName =Str::uuid().'.jpg';
         Storage::put($imageName, file_get_contents($url));
-        UserFile::create([
+        $data = [
             'user_id' => Auth::user()->id,
             'filepath' => $imageName
-        ]);
+        ];
+        $userFile = new UserFile();
+        $repository = new UserFileRepository($userFile);
+        $repository->create($data);
+
+        UserFileGenerated::dispatch($userFile);
     }
 }

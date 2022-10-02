@@ -2,6 +2,7 @@
 
 namespace App\Events;
 
+use App\Models\UserFile;
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Broadcasting\PresenceChannel;
@@ -10,18 +11,20 @@ use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
-class UserFileGenerated
+class UserFileGenerated implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
+
+    public $userFile;
 
     /**
      * Create a new event instance.
      *
      * @return void
      */
-    public function __construct()
+    public function __construct(UserFile $userFile)
     {
-        //
+        $this->userFile = $userFile;
     }
 
     /**
@@ -31,6 +34,6 @@ class UserFileGenerated
      */
     public function broadcastOn()
     {
-        return new PrivateChannel('channel-name');
+        return new channel('userfile');
     }
 }

@@ -21,7 +21,27 @@
             @if ($message = Session::get('info'))
                 <strong class="mt-2">{{ $message }}</strong>
             @endif
-        </div>
+            <p id="file_url" class="mt-2">
+                Lien du fichier :
+            </p>
+            <div id="app">
 
+            </div>
+        </div>
     </div>
 </x-app-layout>
+
+<script>
+    // Enable pusher logging - don't include this in production
+    Pusher.logToConsole = true;
+
+    var pusher = new Pusher('d32133c1331b8621a4a8', {
+        cluster: 'eu'
+    });
+
+    var channel = pusher.subscribe('userfile');
+    channel.bind('UserFileGenerated', function(data) {
+        console.log(JSON.stringify(data));
+        document.getElementById("file_url").innerText = JSON.stringify(data);
+    });
+</script>
