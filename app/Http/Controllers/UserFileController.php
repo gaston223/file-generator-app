@@ -2,9 +2,16 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\User;
+
+use App\Http\Services\UserFiles\ImageGeneratorService;
 use App\Models\UserFile;
+use Illuminate\Container\Container;
+use Faker\Generator;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 class UserFileController extends Controller
 {
@@ -21,11 +28,12 @@ class UserFileController extends Controller
     /**
      * Show the form for creating a new resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\RedirectResponse
      */
-    public function create(User $suer)
+    public function create(ImageGeneratorService $service)
     {
-        //
+        $service::generateImage();
+        return redirect()->route('dashboard')->with('info', "The file generating is in progress, you will be informed when it's done");
     }
 
     /**
